@@ -1,0 +1,48 @@
+<mat-toolbar>Employee Management System</mat-toolbar>
+<div class="wrapper">
+  <div class="action-wrapper">
+    <button (click)="onAddClick()" mat-raised-button>+</button>
+  </div>
+  <div class="mat-elevation-z8">
+    <table mat-table [(dataSource)]="dataSource">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>Email</th>
+        <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="dob">
+        <th mat-header-cell *matHeaderCellDef>DOB</th>
+        <td mat-cell *matCellDef="let element">{{ element.dob }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="skills">
+        <th mat-header-cell *matHeaderCellDef>Skills</th>
+        <td class="card-wrapper" mat-cell *matCellDef="let element">
+          <div *ngFor="let skill of element.skills">
+            <div class="card">{{ skill }}</div>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let element">
+          <button (click)="onEditClick(element)" class="btn-green" mat-button>
+            Edit
+          </button>
+          <button (click)="onDeleteClick(element)" mat-button color="warn">
+            Delete
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+</div>
