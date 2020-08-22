@@ -8,7 +8,7 @@ import { EmployeeModel } from "../employee.model";
 })
 export class AddDialogComponent {
   public formData = {
-    _id: "",
+    id: null,
     name: "",
     email: "",
     dob: null,
@@ -21,7 +21,7 @@ export class AddDialogComponent {
       this.formData.email = data.email;
       this.formData.skills = data.skills;
       this.formData.name = data.name;
-      this.formData._id = data._id;
+      this.formData.id = data.id;
     }
     console.log(this.formData);
   }

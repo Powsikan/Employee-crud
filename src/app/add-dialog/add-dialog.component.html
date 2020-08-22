@@ -3,19 +3,38 @@
   <br />
   <p>Please enter your name :</p>
   <mat-form-field>
-    <input matInput type="text" [(ngModel)]="formData.name" />
+    <input
+      #name="ngModel"
+      required
+      matInput
+      minlength="3"
+      type="text"
+      [(ngModel)]="formData.name"
+    />
   </mat-form-field>
   <br />
   <p>Please enter your email :</p>
   <mat-form-field>
-    <input matInput type="text" [(ngModel)]="formData.email" />
+    <input
+      #email="ngModel"
+      required
+      matInput
+      type="email"
+      [(ngModel)]="formData.email"
+    />
   </mat-form-field>
 
   <br />
   <p>Please select your dob :</p>
   <br />
   <mat-form-field appearance="fill">
-    <input matInput [matDatepicker]="picker" [(ngModel)]="formData.dob" />
+    <input
+      #date="ngModel"
+      required
+      matInput
+      [matDatepicker]="picker"
+      [(ngModel)]="formData.dob"
+    />
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
@@ -25,37 +44,47 @@
     <mat-checkbox
       [checked]="formData.skills.indexOf('HTML') > -1"
       (change)="onChecked($event, 'HTML')"
-      >HTML</mat-checkbox
+    >HTML</mat-checkbox
     >
     <mat-checkbox
       [checked]="formData.skills.indexOf('CSS') > -1"
       (change)="onChecked($event, 'CSS')"
-      >CSS</mat-checkbox
+    >CSS</mat-checkbox
     >
     <mat-checkbox
       [checked]="formData.skills.indexOf('JavaScript') > -1"
       (change)="onChecked($event, 'JavaScript')"
-      >JavaScript</mat-checkbox
+    >JavaScript</mat-checkbox
     >
     <mat-checkbox
       [checked]="formData.skills.indexOf('PHP') > -1"
       (change)="onChecked($event, 'PHP')"
-      >PHP</mat-checkbox
+    >PHP</mat-checkbox
     >
     <mat-checkbox
       [checked]="formData.skills.indexOf('Java') > -1"
       (change)="onChecked($event, 'Java')"
-      >Java</mat-checkbox
+    >Java</mat-checkbox
     >
     <mat-checkbox
       [checked]="formData.skills.indexOf('jQuery') > -1"
       (change)="onChecked($event, 'jQuery')"
-      >jQuery</mat-checkbox
+    >jQuery</mat-checkbox
     >
   </section>
 
   <div mat-dialog-actions>
-    <button mat-raised-button color="primary" [mat-dialog-close]="formData">
+    <button
+      [disabled]="
+        name.invalid ||
+        date.invalid ||
+        email.invalid ||
+        formData.skills.length === 0
+      "
+      mat-raised-button
+      color="primary"
+      [mat-dialog-close]="formData"
+    >
       Done
     </button>
     <button mat-raised-button color="warn" [mat-dialog-close]="false">

@@ -13,6 +13,7 @@ export class AppComponent implements OnInit {
   dataSource = new MatTableDataSource<EmployeeModel>(ELEMENT_DATA);
   title = "app";
   displayedColumns: string[] = ["name", "email", "dob", "skills", "actions"];
+  isLoading = false;
 
   constructor(
     private addDialog: MatDialog,
@@ -20,12 +21,26 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isLoading = true;
     // call employee service to fetch all employees
+    this.employeeService.onGetEmployees().subscribe(
+      (employees: EmployeeModel[]) => {
+        ELEMENT_DATA = employees;
+        this.dataSource.connect().next(ELEMENT_DATA);
+        this.isLoading = false;
+      },
+      (err) => {
+        console.log(err);
+        this.isLoading = false;
+      }
+    );
+
     // ELEMENT_DATA = // Fetched response
     // this.dataSource.connect().next(ELEMENT_DATA);
   }
 
   onAddClick() {
+    this.isLoading = true;
     const addMonthlyFeeDialogRef = this.addDialog.open(AddDialogComponent, {
       disableClose: true,
     });
@@ -35,12 +50,21 @@ export class AppComponent implements OnInit {
         return;
       }
       ELEMENT_DATA.push(data);
-      this.dataSource.connect().next(ELEMENT_DATA);
-      this.employeeService.onAddEmployee(data);
+      this.employeeService.onAddEmployee(data).subscribe(
+        (res) => {
+          this.dataSource.connect().next(ELEMENT_DATA);
+          this.isLoading = false;
+        },
+        (err) => {
+          console.log(err);
+          this.isLoading = false;
+        }
+      );
     });
   }
 
   onEditClick(element: EmployeeModel) {
+    this.isLoading = true;
     console.log(element);
 
     const addMonthlyFeeDialogRef = this.addDialog.open(AddDialogComponent, {
@@ -48,40 +72,48 @@ export class AppComponent implements OnInit {
       data: element,
     });
 
-    addMonthlyFeeDialogRef.afterClosed().subscribe((data) => {
+    addMonthlyFeeDialogRef.afterClosed().subscribe((data: EmployeeModel) => {
       if (!data) {
+        this.isLoading = false;
         return;
       }
-      ELEMENT_DATA.push(data);
-      this.dataSource.connect().next(ELEMENT_DATA);
+
+      ELEMENT_DATA[ELEMENT_DATA.indexOf(element)] = data;
+
+      // ELEMENT_DATA.unshift(data);
       // call employee service to edit
-      this.employeeService.onUpdateEmployee(data);
+      this.employeeService.onUpdateEmployee(data).subscribe(
+        (res) => {
+          this.dataSource.connect().next(ELEMENT_DATA);
+          this.isLoading = false;
+        },
+        (err) => {
+          console.log(err);
+          this.isLoading = false;
+        }
+      );
     });
   }
 
   onDeleteClick(element: EmployeeModel) {
+    this.isLoading = true;
     console.log(element);
-      ELEMENT_DATA = ELEMENT_DATA.filter(employee => employee._id !== element._id);
-      this.dataSource.connect().next(ELEMENT_DATA);
+    ELEMENT_DATA = ELEMENT_DATA.filter(
+      (employee) => employee.id !== element.id
+    );
+
     // call employee service to delete
-    this.employeeService.onUpdateEmployee(element);
+    this.employeeService.onUpdateEmployee(element).subscribe(
+      (res) => {
+        this.dataSource.connect().next(ELEMENT_DATA);
+        this.isLoading = false;
+      },
+      (err) => {
+        console.log(err);
+        this.isLoading = false;
+      }
+    );
   }
 }
 
-let ELEMENT_DATA: EmployeeModel[] = [
-  // Sample data for development
-  {
-    _id: "unique_id_1",
-    email: "jstrfaheem065@gmail.com",
-    name: "Mohamed Faheem",
-    dob: "Tue Aug 18 2020 00:00:00 GMT+0530 (India Standard Time)",
-    skills: ["HTML", "CSS", "JavaScript", "HTML", "CSS", "JavaScript"],
-  },
-  {
-    _id: "unique_id_2",
-    email: "jstrfaheem065@gmail.com",
-    name: "Mohamed Faheem",
-    dob: "Tue Aug 18 2020 00:00:00 GMT+0530 (India Standard Time)",
-    skills: ["HTML", "CSS", "JavaScript", "HTML", "CSS", "JavaScript"],
-  },
-];
+let ELEMENT_DATA: EmployeeModel[] = [];

@@ -1,5 +1,8 @@
 <mat-toolbar>Employee Management System</mat-toolbar>
-<div class="wrapper">
+<div class="progress-state">
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+</div>
+<div class="wrapper" *ngIf="!isLoading">
   <div class="action-wrapper">
     <button (click)="onAddClick()" mat-raised-button>+</button>
   </div>

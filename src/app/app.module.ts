@@ -17,6 +17,7 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { HttpClientModule } from "@angular/common/http";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @NgModule({
   declarations: [AppComponent, AddDialogComponent],
@@ -34,6 +35,7 @@ import { HttpClientModule } from "@angular/common/http";
     MatNativeDateModule,
     MatCheckboxModule,
     HttpClientModule,
+    MatProgressSpinnerModule,
   ],
   providers: [MatDatepickerModule],
   bootstrap: [AppComponent],
