@@ -103,7 +103,7 @@ export class AppComponent implements OnInit {
     );
 
     // call employee service to delete
-    this.employeeService.onUpdateEmployee(element).subscribe(
+    this.employeeService.onDeleteEmployee(element).subscribe(
       (res) => {
         this.dataSource.connect().next(ELEMENT_DATA);
         this.isLoading = false;
